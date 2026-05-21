@@ -7,6 +7,7 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTyp
 import { createAccount } from "./routes/auth/create-account.js";
 import { signIn } from "./routes/auth/sign-in.js";
 import { docApi } from './routes/docs/docs.js';
+import { getUser } from './routes/user/get-user.js';
 
 const app = fastify({
   logger: true,
@@ -71,5 +72,6 @@ app.get("/", async (request, reply) => {
 app.register(docApi)
 app.register(createAccount)
 app.register(signIn)
+app.register(getUser)
 
 export { app };

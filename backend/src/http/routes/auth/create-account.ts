@@ -1,4 +1,4 @@
-import { CreateUserController } from "@/controller/auth/CreateUserController.js";
+import { CreateUserController } from "@/controller/user/CreateUserController.js";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
