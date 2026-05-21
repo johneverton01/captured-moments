@@ -1,6 +1,6 @@
+import { verifyJWT } from "@/utils/jwt.js";
 import type { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
-import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../routes/__errors/unauthorized-error.js";
 
 export const authMiddleware = fastifyPlugin(
@@ -20,7 +20,7 @@ export const authMiddleware = fastifyPlugin(
             throw new UnauthorizedError("Invalid auth token format");
           }
 
-          const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+          const decoded = verifyJWT(token);
 
           return decoded.userId;
         } catch (error) {

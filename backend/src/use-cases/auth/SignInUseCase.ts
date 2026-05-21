@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma/index.js";
 import { comparePassword } from "@/utils/bcrypt.js";
-import jwt from "jsonwebtoken";
+import { signJWT } from "@/utils/jwt.js";
 
 interface SignInRequest {
   email: string;
@@ -34,11 +34,7 @@ export class SignInUseCase {
         throw new Error("Invalid email or password");
       }
 
-      const accessToken = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET!,
-        { expiresIn: "72h" }
-      );
+      const accessToken = signJWT(user.id);
 
       return {
         accessToken,

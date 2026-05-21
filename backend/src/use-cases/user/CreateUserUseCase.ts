@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma/index.js";
 import { cryptPassword } from "@/utils/bcrypt.js";
-import jwt from "jsonwebtoken";
+import { signJWT } from "@/utils/jwt.js";
 
 interface CreateUserDTO {
   name: string;
@@ -39,9 +39,7 @@ export class CreateUserUseCase {
       },
     });
 
-    const accessToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "72h",
-    });
+    const accessToken = signJWT( user.id );
 
     return {
       user: {
