@@ -9,6 +9,7 @@ import { signIn } from "./routes/auth/sign-in.js";
 import { docApi } from './routes/docs/docs.js';
 import { errorHandler } from './routes/error-handler.js';
 import { createMoment } from './routes/moment/create-moment.js';
+import { getMoment } from './routes/moment/get-moment.js';
 import { getUser } from './routes/user/get-user.js';
 
 const app = fastify({
@@ -78,5 +79,6 @@ app.register(createAccount)
 app.register(signIn)
 app.register(getUser)
 app.register(createMoment)
+app.register(getMoment)
 
 export { app };

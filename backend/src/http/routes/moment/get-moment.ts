@@ -1,31 +1,29 @@
-import { CreateMomentController } from '@/controller/moment/create-moment-controller.js';
+import { GetMomentController } from '@/controller/moment/get-moment-controller.js';
 import { authMiddleware } from '@/http/middleware/auth.js';
 import { ErrorSchema } from '@/schemas/error-schemas.js';
-import { CreateMomentBodySchema, MomentResponseSchema } from "@/schemas/moment-schemas.js";
+import { MomentResponseSchema } from '@/schemas/moment-schemas.js';
 import { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { z } from 'zod';
 
-
-export async function createMoment(app: FastifyInstance) {
+export async function getMoment(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>()
   .register(authMiddleware)
-  .post(
+  .get(
     '/moment',
     {
       schema: {
           tags: ['Moment'],
-          summary: 'Create a new moment',
-          body: CreateMomentBodySchema,
+          summary: 'Get moments for the authenticated user',
           response: {
-            201: MomentResponseSchema,
-            400: ErrorSchema,
+            200: z.array(MomentResponseSchema),
             401: ErrorSchema,
             500: ErrorSchema,
           }
-      }
+        }
     },
     async (request, reply) => {
-      return new CreateMomentController().handle(request, reply);
-    }
+      return new GetMomentController().handle(request, reply);
+     }
   );
 }
