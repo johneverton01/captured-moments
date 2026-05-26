@@ -1,4 +1,5 @@
-import { CreateUserController } from "@/controller/user/CreateUserController.js";
+import { CreateUserController } from "@/controller/user/create-user-controller.js";
+import { ErrorSchema } from "@/schemas/error-schemas.js";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -24,10 +25,8 @@ export async function createAccount(app: FastifyInstance) {
             accessToken: z.string(),
             message: z.string(),
           }),
-          400: z.object({
-            message: z.string(),
-          }),
-          500: z.null(),
+          400: ErrorSchema,
+          500: ErrorSchema,
         },
       },
     },

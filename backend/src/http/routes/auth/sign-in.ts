@@ -1,4 +1,4 @@
-import { SignInController } from "@/controller/auth/SignInController.js";
+import { SignInController } from "@/controller/auth/sign-in-controller.js";
 import { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";

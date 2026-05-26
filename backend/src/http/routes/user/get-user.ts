@@ -1,4 +1,4 @@
-import { GetUserController } from "@/controller/user/GetUserController.js";
+import { GetUserController } from "@/controller/user/get-user-controller.js";
 import { authMiddleware } from "@/http/middleware/auth.js";
 import { ErrorSchema } from "@/schemas/error-schemas.js";
 import type { FastifyInstance } from "fastify";

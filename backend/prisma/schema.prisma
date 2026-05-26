@@ -15,5 +15,25 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  registeredMoments RegisteredMoment[]
+
   @@map("users")
+}
+
+model RegisteredMoment {
+  id              String   @id @default(uuid()) @map("_id")
+  title           String
+  story           String?
+  visitedLocation String[] @default([])
+  isFavorite      Boolean  @default(false)
+  imageUrl        String
+  visitedDate     DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId String @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("registered_moments")
 }

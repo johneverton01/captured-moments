@@ -1,4 +1,4 @@
-import { SignInUseCase } from "@/use-cases/auth/SignInUseCase.js";
+import { SignInUseCase } from "@/use-cases/auth/sign-in-use-case.js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export class SignInController {

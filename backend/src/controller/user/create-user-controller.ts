@@ -1,4 +1,5 @@
-import { CreateUserUseCase } from "@/use-cases/user/CreateUserUseCase.js";
+import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
+import { CreateUserUseCase } from "@/use-cases/user/create-user-use-case.js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 interface CreateUserRequestBody {
@@ -17,7 +18,17 @@ export class CreateUserController {
 
       return reply.status(201).send(result);
     } catch (error) {
-      
+      if (error instanceof BadRequestError) {
+        return reply
+          .status(400)
+          .send({ error: error.message, code: "BAD_REQUEST" });
+      }
+      return reply
+        .status(500)
+        .send({
+          error: "Internal Server Error",
+          code: "INTERNAL_SERVER_ERROR",
+        });
     }
   }
 }

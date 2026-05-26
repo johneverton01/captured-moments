@@ -7,6 +7,8 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler, type ZodTyp
 import { createAccount } from "./routes/auth/create-account.js";
 import { signIn } from "./routes/auth/sign-in.js";
 import { docApi } from './routes/docs/docs.js';
+import { errorHandler } from './routes/error-handler.js';
+import { createMoment } from './routes/moment/create-moment.js';
 import { getUser } from './routes/user/get-user.js';
 
 const app = fastify({
@@ -15,6 +17,8 @@ const app = fastify({
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
+
+app.setErrorHandler(errorHandler)
 
 app.register(fastifySwagger, {
   openapi: {
@@ -73,5 +77,6 @@ app.register(docApi)
 app.register(createAccount)
 app.register(signIn)
 app.register(getUser)
+app.register(createMoment)
 
 export { app };

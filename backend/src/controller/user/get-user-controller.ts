@@ -1,11 +1,13 @@
 import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
-import { GetUserUseCase } from "@/use-cases/user/GetUserUseCase.js";
+import { GetUserUseCase } from "@/use-cases/user/get-user-use-case.js";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 
 export class GetUserController {
   async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = await request.getCurrentUserId();
+
+    console.log("User ID from request:", userId);
     try {
       const user = await new GetUserUseCase().execute({ id: userId });
       return reply.status(200).send(user);

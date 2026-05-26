@@ -1,3 +1,4 @@
+import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
 import { prisma } from "@/lib/prisma/index.js";
 import { cryptPassword } from "@/utils/bcrypt.js";
 import { signJWT } from "@/utils/jwt.js";
@@ -26,7 +27,7 @@ export class CreateUserUseCase {
     });
 
     if (userAlreadyExists) {
-      throw new Error("User already exists");
+      throw new BadRequestError("User already exists");
     }
 
     const hashedPassword = await cryptPassword(password);

@@ -9,7 +9,7 @@ export const authMiddleware = fastifyPlugin(
       request.getCurrentUserId = async function() {
         try {
           const authHeader = request.headers.authorization;
-          
+         
           if (!authHeader) {
             throw new UnauthorizedError("Missing auth token");
           }

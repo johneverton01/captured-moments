@@ -1,3 +1,4 @@
+import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
 import { prisma } from "@/lib/prisma/index.js";
 import { comparePassword } from "@/utils/bcrypt.js";
 import { signJWT } from "@/utils/jwt.js";
@@ -25,13 +26,13 @@ export class SignInUseCase {
       });
 
       if (!user) {
-        throw new Error("Invalid email or password");
+        throw new BadRequestError("Invalid email or password");
       }
 
       const isPasswordValid = await comparePassword(password, user.password);
 
       if (!isPasswordValid) {
-        throw new Error("Invalid email or password");
+        throw new BadRequestError("Invalid email or password");
       }
 
       const accessToken = signJWT(user.id);

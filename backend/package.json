@@ -26,6 +26,7 @@
     "@prisma/client": "^7.4.2",
     "@scalar/fastify-api-reference": "^1.57.2",
     "bcrypt": "^6.0.0",
+    "dayjs": "^1.11.20",
     "dotenv": "^17.4.2",
     "fastify": "^5.4.0",
     "fastify-plugin": "^5.1.0",
