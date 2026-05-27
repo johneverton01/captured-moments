@@ -10,5 +10,5 @@ MomentUpdateInput> {
   findAll(userId: string): Promise<Moment[]>;
   update(id: string, data: MomentUpdateInput): Promise<Moment | undefined>;
   delete(id: string): Promise<void>;
-  // search(query: Partial<Moment>, page?: number): Promise<Moment[]>;
+  search(query: Partial<Moment>, page?: string, userId?: string): Promise<Moment[]>;
 }

@@ -4,5 +4,5 @@ export interface IBaseRepository<T, C, U = Partial<C>> {
   findAll?(id?: string): Promise<T[]>;
   update?(id: string, data: U): Promise<T | undefined>;
   delete?(id: string): Promise<void>;
-  search?(query: Partial<T>, page?: number): Promise<T[]>;
+  search?(query: Partial<T>, page?: string): Promise<T[]>;
 }

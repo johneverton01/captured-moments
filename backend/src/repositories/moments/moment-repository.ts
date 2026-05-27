@@ -67,7 +67,30 @@ export class MomentRepository implements IMomentRepository {
     });
   }
 
-  // async search(query: Partial<Moment>, page?: number): Promise<Moment[]> {
-    
-  // }
+  async search(query: Partial<Moment>, page?: string, userId?: string): Promise<Moment[]> {
+    const pageSize = 10;
+    const pageNumber = page ? parseInt(page, 10) : 1;
+    const moments = await prisma.registeredMoment.findMany({
+      where: {
+        userId,
+        OR: [
+          { title: { contains: query.title, mode: 'insensitive' } },
+          { story: { contains: query.story, mode: 'insensitive' } },
+          { visitedLocation: { hasSome: query.visitedLocation } },
+        ],
+      },
+      orderBy: {
+        isFavorite: 'desc',
+      },
+      skip: (pageNumber - 1) * pageSize,
+      take: pageSize,
+    })
+
+    const formattedMoments = moments.map(moment => ({
+      ...moment,
+      visitedDate: moment.visitedDate.toISOString(),
+    }));
+
+    return MomentSchema.array().parse(formattedMoments);
+  }
 }
