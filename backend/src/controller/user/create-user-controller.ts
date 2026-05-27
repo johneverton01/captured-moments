@@ -1,5 +1,5 @@
 import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
-import { CreateUserUseCase } from "@/use-cases/user/create-user-use-case.js";
+import { makeCreateUserUseCase } from "@/use-cases/factories/make-create-user-use-case.js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 interface CreateUserRequestBody {
@@ -13,7 +13,7 @@ export class CreateUserController {
     const { name, email, password } = request.body as CreateUserRequestBody;
 
     try {
-      const createUserUseCase = new CreateUserUseCase();
+      const createUserUseCase = makeCreateUserUseCase();
       const result = await createUserUseCase.execute({ name, email, password });
 
       return reply.status(201).send(result);

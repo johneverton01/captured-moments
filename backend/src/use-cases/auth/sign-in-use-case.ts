@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/index.js";
+import type { IUsersRepository } from "@/repositories/users/users-interface.js";
 import { comparePassword } from "@/utils/bcrypt.js";
 import { signJWT } from "@/utils/jwt.js";
 import { InvalidCredentialsError } from "../__errors/invalid-credentials-error.js";
@@ -18,12 +18,11 @@ interface SignInResponse {
 }
 
 export class SignInUseCase {
+  constructor(private usersRepository: IUsersRepository) {}
   async execute(data: SignInRequest): Promise<SignInResponse> {
       const { email, password } = data;
 
-      const user = await prisma.user.findUnique({
-        where: { email },
-      });
+      const user = await this.usersRepository.findByEmail({ email });
 
       if (!user) {
         throw new InvalidCredentialsError();
@@ -35,7 +34,7 @@ export class SignInUseCase {
         throw new InvalidCredentialsError();
       }
 
-      const accessToken = signJWT(user.id);
+      const accessToken = signJWT(user.id!);
 
       return {
         accessToken,

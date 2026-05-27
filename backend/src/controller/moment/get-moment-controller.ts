@@ -1,5 +1,5 @@
 import { UnauthorizedError } from '@/http/routes/__errors/unauthorized-error.js';
-import { GetMomentUseCase } from '@/use-cases/moment/get-moment-use-case.js';
+import { makeGetMomentUseCase } from '@/use-cases/factories/make-get-moment-use-case.js';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export class GetMomentController {
@@ -11,9 +11,9 @@ export class GetMomentController {
     }
 
     try {
-      const getMomentUseCase = new GetMomentUseCase();
-      const { moments } = await getMomentUseCase.execute({ userId });
-      return reply.send(moments);
+      const getMomentUseCase = makeGetMomentUseCase();
+      const moments = await getMomentUseCase.execute({ userId });
+      return reply.status(200).send(moments);
     } catch (error) {
       return reply.status(500).send({ error: 'Failed to get moments' });
     }

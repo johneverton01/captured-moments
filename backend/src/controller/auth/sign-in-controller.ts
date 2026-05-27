@@ -1,4 +1,5 @@
-import { SignInUseCase } from "@/use-cases/auth/sign-in-use-case.js";
+import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
+import { makeSignInUseCase } from "@/use-cases/factories/make-sign-in-use-case.js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export class SignInController {
@@ -9,12 +10,16 @@ export class SignInController {
     };
 
     try {
-      const signInUseCase = new SignInUseCase();
-      const result = await signInUseCase.execute({email, password });
+      const signInUseCase = makeSignInUseCase();
+      const result = await signInUseCase.execute({ email, password });
 
       return reply.status(201).send(result);
     } catch (error) {
-      return reply.status(400).send({ message: (error as Error).message });
+      if (error instanceof BadRequestError) {
+        return reply
+          .status(400)
+          .send({ error: error.message, code: "BAD_REQUEST" });
+      }
     }
   }
 }

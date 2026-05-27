@@ -1,38 +1,18 @@
- import { prisma } from "@/lib/prisma/index.js";
-import { type Moments } from "@/schemas/moment-schemas.js";
+ import type { Moment } from "@/entities/moment/moment-entity.js";
+import type { IMomentRepository } from "@/repositories/moments/moment-interface.js";
  
  interface GetMomentUseCaseRequest {
   userId: string;
 }
 
-interface GetMomentUseCaseResponse {
-  moments: Moments[];
-}
-
 export class GetMomentUseCase {
-  async execute(data: GetMomentUseCaseRequest): Promise<GetMomentUseCaseResponse> {
+  constructor(private momentsRepository: IMomentRepository) {}
+
+  async execute(data: GetMomentUseCaseRequest): Promise<Moment[]> {
     const { userId } = data;
 
-    const moments = await prisma.registeredMoment.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        isFavorite: 'desc',
-      }
-    });
-
-    const formattedMoments = moments.map(moment => ({
-      id: moment.id,
-      title: moment.title,
-      story: moment.story ?? '',
-      visitedLocation: moment.visitedLocation,
-      imageUrl: moment.imageUrl,
-      visitedDate: moment.visitedDate.toString(),
-      isFavorite: moment.isFavorite,
-    }));
-
-
-    return { moments: formattedMoments };
+    const moments = await this.momentsRepository.findAll(userId);
+    
+    return moments
   }
 }

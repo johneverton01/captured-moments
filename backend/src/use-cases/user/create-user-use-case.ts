@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma/index.js";
+import type { IUsersRepository } from "@/repositories/users/users-interface.js";
 import { cryptPassword } from "@/utils/bcrypt.js";
 import { signJWT } from "@/utils/jwt.js";
 import { UserAlreadyExistsError } from "../__errors/user-already-exists-error.js";
@@ -19,12 +19,11 @@ interface CreateUserResponse {
 }
 
 export class CreateUserUseCase {
+  constructor(private usersRepository: IUsersRepository) {}
   async execute(data: CreateUserDTO): Promise<CreateUserResponse> {
     const { name, email, password } = data;
 
-    const userAlreadyExists = await prisma.user.findUnique({
-      where: { email },
-    });
+    const userAlreadyExists = await this.usersRepository.findByEmail({ email });
 
     if (userAlreadyExists) {
       throw new UserAlreadyExistsError();
@@ -32,15 +31,13 @@ export class CreateUserUseCase {
 
     const hashedPassword = await cryptPassword(password);
 
-    const user = await prisma.user.create({
-      data: {
+    const user = await this.usersRepository.create({
         name,
         email,
         password: hashedPassword,
-      },
     });
 
-    const accessToken = signJWT( user.id );
+    const accessToken = signJWT( user.id! );
 
     return {
       user: {

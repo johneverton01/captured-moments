@@ -1,5 +1,5 @@
 import { BadRequestError } from "@/http/routes/__errors/bad-request-error.js";
-import { CreateMomentUseCase } from "@/use-cases/moment/create-moment-use-case.js";
+import { makeCreateMomentUseCase } from "@/use-cases/factories/make-create-moment-use-case.js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export class CreateMomentController {
@@ -15,7 +15,7 @@ export class CreateMomentController {
     try {
 
       const userId = await request.getCurrentUserId();
-      const createMomentUseCase = new CreateMomentUseCase();
+      const createMomentUseCase = makeCreateMomentUseCase();
       const dateFormatted = new Date(visitedDate);
     
       const result = await createMomentUseCase.execute({
@@ -28,8 +28,7 @@ export class CreateMomentController {
       });
 
       return reply.status(201).send({ 
-       ...result,
-        visitedDate: result.visitedDate.toISOString(),
+       result,
       });
       
     } catch (error) {
