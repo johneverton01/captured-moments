@@ -7,14 +7,17 @@ import { UnauthorizedError } from "./__errors/unauthorized-error.js";
 
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
-export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
+export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
+    const validationIssues = error.validation.map(issue => ({
+      field: issue.instancePath, 
+      message: issue.message      
+    }));
+    
     return reply.code(400).send({
+      code: "VALIDATION_ERROR",
       error: 'Response validation error',
-      message: "Request doesn't match the expected schema",
-      details: {
-        issues: error.validation,
-      }
+      issues: validationIssues,
     })
   }
 
@@ -51,6 +54,7 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
 
   return reply.status(500).send({
     code: "INTERNAL_SERVER_ERROR",
-    error: "Internal server error"
+    error: "Internal server error",
+    
   });
 }

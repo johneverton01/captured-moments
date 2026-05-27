@@ -16,7 +16,12 @@ export class MomentRepository implements IMomentRepository {
       },
     });
 
-    return MomentSchema.parse(moment);
+    const formattedMoment = {
+      ...moment,
+      visitedDate: this.formatVisitedDate(moment.visitedDate),
+    };
+
+    return MomentSchema.parse(formattedMoment);
   }
 
   async findById(id: string): Promise<Moment | undefined> {
@@ -24,7 +29,16 @@ export class MomentRepository implements IMomentRepository {
       where: { id },
     });
 
-    return moment ? MomentSchema.parse(moment) : undefined;
+    if (!moment) {
+      return undefined;
+    }
+
+    const formattedMoment = {
+      ...moment,
+      visitedDate: this.formatVisitedDate(moment.visitedDate),
+    };
+
+    return MomentSchema.parse(formattedMoment);
   }
 
   async findAll(userId: string): Promise<Moment[]> {
@@ -39,14 +53,23 @@ export class MomentRepository implements IMomentRepository {
 
     const formattedMoments = moments.map(moment => ({
       ...moment,
-      visitedDate: moment.visitedDate.toISOString(),
+      visitedDate: this.formatVisitedDate(moment.visitedDate),
     }));
 
     return MomentSchema.array().parse(formattedMoments);
   }
 
   async update(id: string, data: Partial<MomentCreateInput>): Promise<Moment | undefined> {
-    const { title, story, imageUrl, visitedDate, visitedLocation } = data;
+    const { title, story, imageUrl, visitedDate, visitedLocation, userId } = data;
+
+    const existingMoment = await prisma.registeredMoment.findUnique({
+      where: { userId, id },
+    });
+
+    if (!existingMoment) {
+      throw new Error("Moment not found");
+    }
+
     const moment = await prisma.registeredMoment.update({
       where: { id },
       data: {
@@ -58,12 +81,17 @@ export class MomentRepository implements IMomentRepository {
       },
     });
 
-    return moment ? MomentSchema.parse(moment) : undefined;
+    const formattedMoment = {
+      ...moment,
+      visitedDate: this.formatVisitedDate(moment.visitedDate),
+    };
+
+    return MomentSchema.parse(formattedMoment);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, userId: string): Promise<void> {
     await prisma.registeredMoment.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 
@@ -88,9 +116,13 @@ export class MomentRepository implements IMomentRepository {
 
     const formattedMoments = moments.map(moment => ({
       ...moment,
-      visitedDate: moment.visitedDate.toISOString(),
+      visitedDate: this.formatVisitedDate(moment.visitedDate),
     }));
 
     return MomentSchema.array().parse(formattedMoments);
+  }
+
+  private formatVisitedDate(date: Date): string {
+    return date.toISOString();
   }
 }
