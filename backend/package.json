@@ -22,6 +22,7 @@
     "@fastify/cors": "^11.0.1",
     "@fastify/jwt": "^10.1.0",
     "@fastify/swagger": "^9.7.0",
+    "@google/genai": "^2.7.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.4.2",
     "@scalar/fastify-api-reference": "^1.57.2",
@@ -32,7 +33,9 @@
     "fastify-plugin": "^5.1.0",
     "fastify-type-provider-zod": "^6.1.0",
     "jsonwebtoken": "^9.0.3",
+    "ky": "^2.0.2",
     "tsx": "^4.20.3",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zod-to-json-schema": "^3.25.2"
   }
 }

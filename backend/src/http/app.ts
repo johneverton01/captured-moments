@@ -8,6 +8,7 @@ import { createAccount } from "./routes/auth/create-account.js";
 import { signIn } from "./routes/auth/sign-in.js";
 import { docApi } from './routes/docs/docs.js';
 import { errorHandler } from './routes/error-handler.js';
+import { generateMomentDescription } from './routes/ia/generate-moment-description.js';
 import { createMoment } from './routes/moment/create-moment.js';
 import { getMoment } from './routes/moment/get-moment.js';
 import { searchMoment } from './routes/moment/search-moment.js';
@@ -84,5 +85,6 @@ app.register(createMoment)
 app.register(getMoment)
 app.register(searchMoment)
 app.register(updateMoment)
+app.register(generateMomentDescription)
 
 export { app };

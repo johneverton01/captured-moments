@@ -22,7 +22,7 @@ export async function updateMoment(app: FastifyInstance) {
             id: z.uuid(),
           }),
           response: {
-            201: MomentSchema,
+            200: MomentSchema,
             400: ErrorSchema,
             401: ErrorSchema,
             500: ErrorSchema,
