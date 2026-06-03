@@ -1,5 +1,6 @@
 import fastifyCors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
+import multipart from "@fastify/multipart";
 import fastifySwagger from '@fastify/swagger';
 import fastifyApiReference from "@scalar/fastify-api-reference";
 import fastify from "fastify";
@@ -9,6 +10,7 @@ import { signIn } from "./routes/auth/sign-in.js";
 import { docApi } from './routes/docs/docs.js';
 import { errorHandler } from './routes/error-handler.js';
 import { generateMomentDescription } from './routes/ia/generate-moment-description.js';
+import { uploadImage } from './routes/image/upload-image.js';
 import { createMoment } from './routes/moment/create-moment.js';
 import { getMoment } from './routes/moment/get-moment.js';
 import { searchMoment } from './routes/moment/search-moment.js';
@@ -77,6 +79,8 @@ app.get("/", async (request, reply) => {
   })
 });
 
+app.register(multipart)
+
 app.register(docApi)
 app.register(createAccount)
 app.register(signIn)
@@ -86,5 +90,6 @@ app.register(getMoment)
 app.register(searchMoment)
 app.register(updateMoment)
 app.register(generateMomentDescription)
+app.register(uploadImage)
 
 export { app };
